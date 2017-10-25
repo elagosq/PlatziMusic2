@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import {  
   StyleSheet,  
   View,
+  Picker,
   ActivityIndicator,
   Platform  
 } from 'react-native';
@@ -15,27 +16,41 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import ArtistList from './ArtistList'
-import { getArtists } from './api-client'
+import { getArtistsCountry } from './api-client'
+import PaisPicker from './pais-picker'
 
 
 export default class HomeView extends Component {
   
   state = {
-    artists : null
+    artists : null,
+    loading:true,
+    country:''
   }
 
-  /*componente haya sido montado ui se ejecuta el metodo*/
+  /*componente haya sido renderizado se ejecuta el metodo*/
   componentDidMount(){
-     getArtists()
-     .then(data => this.setState({ artists : data }))
+    this.handleCountryChange('chile');
+  }
+
+  handleCountryChange(country){
+    this.setState({
+      country
+    })
+    getArtistsCountry(country)
+    .then(data => this.setState({ artists : data }))
   }
 
   render() {   
     const artists = this.state.artists   
     return (
-      <View style={styles.container}>
-        {!artists && <ActivityIndicator size="large" />}
-        {artists && <ArtistList artists={artists} />}
+      <View style={styles.container}> 
+      <PaisPicker
+        selectedValue={this.state.country}
+        onValueChange={(country) => this.handleCountryChange(country)}        
+       />             
+      {!artists && <ActivityIndicator size="large" />}
+      {artists && <ArtistList artists={artists} />}
       </View>
     );
   }
@@ -48,7 +63,8 @@ const styles = StyleSheet.create({
     paddingTop:Platform.select({
       ios:50,
       android:10
-    }),    
+    }),
+    paddingBottom:30    
   },
 });
 
