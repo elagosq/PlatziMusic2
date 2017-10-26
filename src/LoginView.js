@@ -10,7 +10,8 @@ import {
   View,
   Text,
   Button,
-  Image  
+  Image,
+  StatusBar  
 } from 'react-native';
 
 import FBSDK,  {
@@ -61,8 +62,13 @@ export default class LoginView extends Component {
   }
 
   render() {    
-    return (
-      <Image source={require('./background.jpg')} style={styles.container}>
+    return (     
+       <Image source={require('./background.jpg')} style={styles.container}>
+        <StatusBar
+          translucent
+          backgroundColor="rgba(0, 0, 0, 0.20)"
+          animated
+         />         
          <Text style={styles.welcome}>
            Bienvenidos a PlatziMusic
          </Text>   
@@ -71,7 +77,7 @@ export default class LoginView extends Component {
             readPermissions={['public_profile','email']}
             onLoginFinished={this.handleLoginFinished}
             onLogoutFinished={() => alert("logout.")}/>
-      </Image>
+      </Image> 
     );
   }
 }
